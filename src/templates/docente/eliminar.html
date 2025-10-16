@@ -1,0 +1,43 @@
+{% extends 'inicio/inicio.html' %}
+
+{% block section %}
+    <div class="confirmation-container">
+        <div class="header">
+            <h1><span class="header-icon">⚠️</span> Confirmar Eliminación</h1>
+        </div>
+
+        <div class="confirmation-box">
+            <p class="confirmation-message">
+                ¿Estás seguro de que quieres eliminar al docente:
+            </p>
+            
+            <h2 class="object-to-delete">
+                <strong>{{ object.nombre }} {{ object.apellido }}</strong>
+            </h2>
+            
+            <p class="warning-message">
+                Esta acción no se puede deshacer.
+            </p>
+        </div>
+
+        <!-- 
+          PASO 1: El formulario que enviará la orden de eliminación.
+          Al presionar el botón de tipo "submit", se enviará esta información a la vista.
+        -->
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-actions">
+                <!-- 
+                  PASO 2: Este botón es el que activa todo el proceso.
+                  Al hacer clic, se envía el formulario a la DocenteEliminarVista.
+                  La vista eliminará al docente de la base de datos (esto es "guardar los cambios").
+                -->
+                <button type="submit" class="btn btn-eliminar">🗑️ Sí, Eliminar Docente</button>
+                
+                <!-- Este botón cancela la acción y vuelve a la lista directamente -->
+                <a href="{% url 'docente:docente_leer' %}" class="btn btn-cancelar">❌ Cancelar</a>
+            </div>
+        </form>
+    </div>
+{% endblock section %}

@@ -1,0 +1,12 @@
+{% block section %}
+<h1>Lista de Estudiantes</h1>
+    <ul>
+        {% for estudiante in estudiantes %}
+            <li>{{ estudiante.nombre }}</li>
+        {% empty %}
+            <li>No hay Estudiantes cargados.</li>
+        {% endfor %}
+    </ul>
+{% endblock section %}
+    
+

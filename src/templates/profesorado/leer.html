@@ -1,0 +1,8 @@
+<h1>Lista de Asistencia</h1>
+<ul>
+{% for profesorado in profesorados %}
+<li>{{ profesorado.nombre_instituto }}</li>
+{% empty %}
+<li>No hay profesorado disponibles.</li>
+{% endfor %}
+</ul>

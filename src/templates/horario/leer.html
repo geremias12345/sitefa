@@ -1,0 +1,59 @@
+{% extends 'inicio/inicio.html' %}
+
+{% block section %}
+ <div class="header">
+            <h1><i class="fas fa-clipboard-list header-icon"></i>Asistencia</h1>
+            <!-- Botón para crear nueva asistencia -->
+            <a href="{% url 'horario:horario_crear' %}">
+                <button class="btn btn-crear">
+                    <i class="fas fa-plus"></i> Agregar
+                </button>
+            </a>
+        </div>
+
+<!-- Tabla de asistencias -->
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>materia</th>
+                <th>Dia_semana</th>
+                <th>Hora_inicio</th>
+                <th>Hora_fin</th>
+                 <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in horarios %}
+            <tr>
+                <td>{{ a.materia }}</td>
+                <td>{{ a.dia_semana }}</td>
+                <td>{{ a.hora_inicio|time:"H:i" }}</td>
+                <td>{{ a.hora_fin|time:"H:i" }}</td>
+                 <td>
+                            <div class="actions">
+                                <!-- Botón Actualizar -->
+                                <a href="{% url 'horario:horario_actualizar' a.id %}">
+                                    <button class="btn btn-actualizar" title="Editar">
+                                        <i class="fas fa-edit"></i> 
+                                    </button>
+                                </a>
+                                <!-- Botón Eliminar -->
+                                <a href="{% url 'horario:horario_eliminar' a.id %}">
+                                    <button class="btn btn-eliminar" title="Eliminar">
+                                        <i class="fas fa-trash"></i> 
+                                    </button>
+                                </a>
+                            </div>
+                        </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center">No hay horarios registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock section %}

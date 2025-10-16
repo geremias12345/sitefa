@@ -1,0 +1,152 @@
+{% extends 'inicio/inicio.html' %}
+
+{% block section %}
+ <div class="header">
+            <h1>Asistencia</h1>
+            <!-- Botón para crear nueva asistencia -->
+            <a href="{% url 'asistencia:asistencia_crear' %}">
+                <button class="btn btn-crear">
+                    <i class="fas fa-plus"></i> Agregar
+                </button>
+            </a>
+        </div>
+
+<hr>
+<!-- Filtros -->
+<form method="get" class="d-flex gap-2 mb-3">
+    <select name="anio" class="form-select w-auto">
+        <option value="">Todos los años</option>
+        {% for a in anios %}
+            <option value="{{ a }}" {% if selected_anio == a|stringformat:"s" %}selected{% endif %}>{{ a }}º Año</option>
+        {% endfor %}
+    </select>
+
+    <select name="materia" class="form-select w-auto">
+        <option value="">Todas las materias</option>
+        {% for m in materias %}
+            <option value="{{ m.id }}" {% if selected_materia == m.id|stringformat:"s" %}selected{% endif %}>{{ m.nombre }} - {{ m.anio }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+</form>
+
+<!-- Tabla de asistencias -->
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Estudiante</th>
+                <th>Año</th>
+                <th>Materia</th>
+                <th>Fecha</th>
+                <th>Presente</th>
+                <th>Justificación</th>
+                 <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in asistencias %}
+            <tr>
+                <td>{{ a.estudiante }}</td>
+                <td>{{ a.materia.anio }}</td>
+                <td>{{ a.materia.nombre }}</td>
+                <td>{{ a.fecha }}</td>
+               <td>
+                            {% if a.presente %}
+                                <span class="status-badge status-presente">
+                                    <i class="fas fa-check-circle"></i> PRESENTE
+                                </span>
+                            {% else %}
+                                <span class="status-badge status-ausente">
+                                    <i class="fas fa-times-circle"></i> AUSENTE
+                                </span>
+                            {% endif %}
+                        </td>
+                <td>{{ a.justificacion|default:"-" }}</td>
+                 <td>
+                            <div class="actions">
+                                <!-- Botón Actualizar -->
+                                <a href="{% url 'asistencia:asistencia_actualizar' a.id %}">
+                                    <button class="btn btn-actualizar" title="Editar">
+                                        <i class="fas fa-edit"></i> 
+                                    </button>
+                                </a>
+                                <!-- Botón Eliminar -->
+                                <a href="{% url 'asistencia:asistencia_eliminar' a.id %}">
+                                    <button class="btn btn-eliminar" title="Eliminar">
+                                        <i class="fas fa-trash"></i> 
+                                    </button>
+                                </a>
+                            </div>
+                        </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center">No hay asistencias registradas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Paginación -->
+{% if is_paginated %}
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center mt-3">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?{% if selected_anio %}anio={{ selected_anio }}&{% endif %}{% if selected_materia %}materia={{ selected_materia }}&{% endif %}page={{ page_obj.previous_page_number }}" aria-label="Anterior">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+    {% endif %}
+    {% for num in paginator.page_range %}
+      <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+        <a class="page-link" href="?{% if selected_anio %}anio={{ selected_anio }}&{% endif %}{% if selected_materia %}materia={{ selected_materia }}&{% endif %}page={{ num }}">{{ num }}</a>
+      </li>
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?{% if selected_anio %}anio={{ selected_anio }}&{% endif %}{% if selected_materia %}materia={{ selected_materia }}&{% endif %}page={{ page_obj.next_page_number }}" aria-label="Siguiente">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+
+</div>
+
+
+{% endif %}
+
+     <!-- Estadísticas -->
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value">{{ asistencias|length }}</div>
+                <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="presentes-count">0</div>
+                <div class="stat-label">Presentes</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="ausentes-count">0</div>
+                <div class="stat-label">Ausentes</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Contar presentes y ausentes
+            const presentes = document.querySelectorAll('.status-presente').length;
+            const ausentes = document.querySelectorAll('.status-ausente').length;
+            
+            // Actualizar contadores
+            document.getElementById('presentes-count').textContent = presentes;
+            document.getElementById('ausentes-count').textContent = ausentes;
+        });
+    </script>
+{% endblock section %}

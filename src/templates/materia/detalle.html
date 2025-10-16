@@ -1,0 +1,58 @@
+{% extends 'inicio/inicio.html' %} {% block section %}
+<!-- Cabecera -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Detalle de Materia: {{ materia.nombre }}</h1>
+  <a href="{% url 'materia:materia_leer' %}" class="btn btn-secondary"
+    >Volver a materias</a
+  >
+</div>
+<hr />
+
+<!-- Información básica -->
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title">Información</h5>
+    <hr />
+    <p><strong>Año:</strong> {{ materia.anio }}º Año</p>
+    <p>
+      <strong>Profesorado:</strong> {{ materia.profesorado.nombre_instituto }}
+    </p>
+  </div>
+</div>
+
+<!-- Horarios -->
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title">Horarios</h5>
+    <hr />
+    {% if horarios %}
+    <ul>
+      {% for h in horarios %}
+      <li>
+        {{ h.get_dia_semana_display }}: {{ h.hora_inicio }} - {{ h.hora_fin }}
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No hay horarios asignados.</p>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Accesos rápidos -->
+<div class="d-flex gap-2 mb-3">
+  <a
+    href="{% url 'estudiante:estudiante_leer' %}?materia={{ materia.id }}"
+    class="btn btn-primary"
+  >
+    Ver Estudiantes
+  </a>
+  <a
+    href="{% url 'docente:docente_leer' %}?materia={{ materia.id }}"
+    class="btn btn-primary"
+  >
+    Ver Docentes
+  </a>
+</div>
+
+{% endblock section %}

@@ -1,0 +1,61 @@
+{% extends 'inicio/inicio.html' %}
+
+{% block section %}
+<h1>Actualizar Horario</h1>
+<form method="post">
+    <input type="hidden" name="csrfmiddlewaretoken" value="lQtsLA24vATHkzIPWsh3pYp3XRAUQkJ8AFnr7QzHZ3i7iyPFwDXaTvLNpqqiPbV1">
+    <p>
+    <label for="id_materia">Materia:</label>
+    <select name="materia" required id="id_materia">
+  <option value="">---------</option>
+
+  <option value="1" selected>Alesi - 1</option>
+
+</select>
+    
+    
+  </p>
+
+  
+  <p>
+    <label for="id_dia_semana">Dia semana:</label>
+    <select name="dia_semana" required id="id_dia_semana">
+  <option value="">---------</option>
+
+  <option value="LUN">Lunes</option>
+
+  <option value="MAR">Martes</option>
+
+  <option value="MIE">Miércoles</option>
+
+  <option value="JUE">Jueves</option>
+
+  <option value="VIE">Viernes</option>
+
+  <option value="SAB" selected>Sábado</option>
+
+</select>
+    
+    
+  </p>
+
+  
+  <p>
+    <label for="id_hora_inicio">Hora inicio:</label>
+    <input type="text" name="hora_inicio" value="12:00:00" required id="id_hora_inicio">
+    
+    
+  </p>
+
+  
+  <p>
+    <label for="id_hora_fin">Hora fin:</label>
+    <input type="text" name="hora_fin" value="18:00:00" required id="id_hora_fin">
+    
+    
+      
+    
+  </p>
+    <button type="submit">Guardar cambios</button>
+</form>
+{% endblock section %}

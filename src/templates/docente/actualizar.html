@@ -1,0 +1,26 @@
+{% extends 'inicio/inicio.html' %}
+
+{% block section %}
+    <div class="form-container">
+        <div class="header">
+            <h1><span class="header-icon">✏️</span> Actualizar Docente</h1>
+        </div>
+
+        <!-- 1. El formulario para editar los datos existentes -->
+        <form method="POST">
+            <!-- 2. Token de seguridad de Django (¡Obligatorio!) -->
+            {% csrf_token %}
+
+            <!-- 3. Django rellena automáticamente estos campos con los datos actuales del docente -->
+            <div class="form-fields">
+                {{ form.as_p }}
+            </div>
+            
+            <!-- 4. Botones de acción -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-actualizar">💾 Guardar Cambios</button>
+                <a href="{% url 'docente:docente_leer' %}" class="btn btn-cancelar">❌ Cancelar</a>
+            </div>
+        </form>
+    </div>
+{% endblock section %}
