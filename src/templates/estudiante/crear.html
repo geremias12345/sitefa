@@ -1,6 +1,56 @@
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Crear Estudiante</button>
-</form>
-    
+{% extends 'inicio/inicio.html' %}
+
+{% block section %}
+<div class="form-container">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Crear Materia</h1>
+        <a href="{% url 'materia:materia_leer' %}">
+            <button class="btn btn-volver">
+                <i class="fas fa-arrow-left"></i> Volver
+            </button>
+        </a>
+    </div>
+    <hr>
+    <form method="post" class="styled-form">
+        {% csrf_token %}
+
+        <!-- Nombre -->
+        <div class="mb-3">
+            <label for="id_nombre" class="form-label">Nombre:</label>
+            <input type="text" name="nombre" maxlength="100" required id="id_nombre" class="form-control" value="{{ form.nombre.value|default_if_none:'' }}">
+        </div>
+
+        <!-- Año -->
+        <div class="mb-3">
+            <label for="id_anio" class="form-label">Año:</label>
+            <select name="anio" id="id_anio" class="form-select">
+                {% for a in anios %}
+                    <option value="{{ a }}" {% if selected_anio == a|stringformat:"s" %}selected{% endif %}>
+                        {{ a }}º Año
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Profesorado -->
+        <div class="mb-3">
+            <label for="id_profesorado" class="form-label">Profesorado:</label>
+            <select name="profesorado" id="id_profesorado" class="form-select" required>
+                <option value="">---------</option>
+                {% for prof in profesorados %}
+                    <option value="{{ prof.id }}" {% if selected_profesorado == prof.id %}selected{% endif %}>
+                        {{ prof.nombre_instituto|upper }}, {{ prof.ciclo_lectivo }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Botón Guardar -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-guardar">
+               <i class="fas fa-save"></i> Guardar
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock section %}
