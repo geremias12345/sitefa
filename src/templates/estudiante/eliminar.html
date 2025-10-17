@@ -1,14 +1,33 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Eliminar estudiante</title>
-</head>
-<body>
-    <h1>¿Estás seguro de que querés eliminar "{{ object.nombre }}"?</h1>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Sí, eliminar</button>
-        <a href="{% url '' %}">Cancelar</a>
-    </form>
-</body>
-</html>
+{% extends 'inicio/inicio.html' %}
+
+{% block section %}
+    <div class="confirmation-container">
+        <div class="header">
+            <h1><span class="header-icon">⚠️</span> Confirmar Eliminación</h1>
+        </div>
+
+        <div class="confirmation-box">
+            <p class="confirmation-message">
+                ¿Estás seguro de que quieres eliminar al estudiante:
+            </p>
+            
+            <h2 class="object-to-delete">
+                <strong>{{ object.nombre }} {{ object.apellido }}</strong>
+            </h2>
+            
+            <p class="warning-message">
+                Esta acción no se puede deshacer.
+            </p>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-eliminar">🗑️ Sí, Eliminar Estudiante</button>
+                
+                <a href="{% url 'estudiante:estudiante_leer' %}" class="btn btn-cancelar">❌ Cancelar</a>
+            </div>
+        </form>
+    </div>
+{% endblock section %}

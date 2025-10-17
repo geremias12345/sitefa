@@ -1,12 +1,145 @@
-{% block section %}
-<h1>Lista de Estudiantes</h1>
-    <ul>
-        {% for estudiante in estudiantes %}
-            <li>{{ estudiante.nombre }}</li>
-        {% empty %}
-            <li>No hay Estudiantes cargados.</li>
-        {% endfor %}
-    </ul>
-{% endblock section %}
-    
+{% extends 'inicio/inicio.html' %}
 
+{% block section %}
+<div class="header">
+    <h1><i class="fas fa-user-graduate header-icon"></i> Lista de Estudiantes</h1>
+</div>
+
+<form method="get" class="d-flex align-items-center gap-2 mb-3 flex-wrap">
+    <input 
+        type="text" 
+        name="nombre" 
+        class="form-control w-auto" 
+        placeholder="Buscar por nombre..." 
+        value="{{ request.GET.nombre }}"
+    >
+
+    <input 
+        type="text" 
+        name="apellido" 
+        class="form-control w-auto" 
+        placeholder="Buscar por apellido..." 
+        value="{{ request.GET.apellido }}"
+    >
+
+    <button type="submit" class="btn btn-outline-primary" title="Buscar">
+        <i class="fas fa-search"></i>
+    </button>
+
+    <a href="{% url 'estudiante:estudiante_leer' %}" class="btn btn-secondary" title="Limpiar filtros">
+        <i class="fas fa-times"></i>
+    </a>
+
+    <div class="ms-auto">
+        <a href="{% url 'estudiante:estudiante_crear' %}">
+            <button type="button" class="btn btn-crear">
+                <i class="fas fa-plus"></i> Agregar
+            </button>
+        </a>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>DNI</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Dirección</th>
+                <th>Fecha de Nacimiento</th>
+                <th>Ciclo de Ingreso</th>
+                <th>Estado</th>
+                <th>Materias</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for estudiante in estudiantes %}
+                <tr>
+                    <td>{{ estudiante.nombre }}</td>
+                    <td>{{ estudiante.apellido }}</td>
+                    <td>{{ estudiante.dni }}</td>
+                    <td>{{ estudiante.email }}</td>
+                    <td>{{ estudiante.telefono }}</td>
+                    <td>{{ estudiante.direccion }}</td>
+                    <td>{{ estudiante.fecha_nacimiento|date:"d/m/Y" }}</td>
+                    <td>{{ estudiante.ciclo_ingreso }}</td>
+                    <td>{{ estudiante.get_estado_display }}</td>
+                    <td>
+                        {% if estudiante.materia.all %}
+                            {% for materia in estudiante.materia.all %}
+                                {{ materia.nombre }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            Sin materias
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="actions d-flex gap-1">
+                            <a href="{% url 'estudiante:estudiante_actualizar' estudiante.pk %}">
+                                <button class="btn btn-actualizar" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </a>
+                            <a href="{% url 'estudiante:estudiante_eliminar' estudiante.pk %}">
+                                <button class="btn btn-eliminar" title="Eliminar">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="11" class="text-center">
+                        {% if request.GET.nombre or request.GET.apellido %}
+                            <strong>No se encontraron estudiantes con los datos ingresados.</strong>
+                        {% else %}
+                            <strong>No hay estudiantes registrados.</strong>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if is_paginated %}
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center mt-3">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?{% if request.GET.nombre %}nombre={{ request.GET.nombre }}&{% endif %}{% if request.GET.apellido %}apellido={{ request.GET.apellido }}&{% endif %}page={{ page_obj.previous_page_number }}" aria-label="Anterior">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+    {% endif %}
+
+    {% for num in paginator.page_range %}
+      <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+        <a class="page-link" href="?{% if request.GET.nombre %}nombre={{ request.GET.nombre }}&{% endif %}{% if request.GET.apellido %}apellido={{ request.GET.apellido }}&{% endif %}page={{ num }}">{{ num }}</a>
+      </li>
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?{% if request.GET.nombre %}nombre={{ request.GET.nombre }}&{% endif %}{% if request.GET.apellido %}apellido={{ request.GET.apellido }}&{% endif %}page={{ page_obj.next_page_number }}" aria-label="Siguiente">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+
+<div class="stats mt-3">
+    <div class="stat-item">
+        <div class="stat-value">{{ estudiantes|length }}</div>
+        <div class="stat-label">Total de estudiantes</div>
+    </div>
+</div>
+
+{% endblock section %}

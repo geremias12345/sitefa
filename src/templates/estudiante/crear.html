@@ -1,6 +1,22 @@
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Crear Estudiante</button>
-</form>
-    
+{% extends 'inicio/inicio.html' %}
+
+{% block section %}
+    <div class="form-container">
+        <div class="header">
+            <h1><span class="header-icon">➕</span> Agregar Nuevo Estudiante</h1>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-fields">
+                {{ form.as_p }}
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-crear">💾 Guardar Estudiante</button>
+                <a href="{% url 'estudiante:estudiante_leer' %}" class="btn btn-cancelar">❌ Cancelar</a>
+            </div>
+        </form>
+    </div>
+{% endblock section %}
