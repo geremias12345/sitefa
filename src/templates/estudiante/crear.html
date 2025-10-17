@@ -1,6 +1,10 @@
+{% extends 'inicio/inicio.html' %}
+
+{% block section %}
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Crear Estudiante</button>
 </form>
+{%endblock section %}
     
