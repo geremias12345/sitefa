@@ -6,7 +6,6 @@
     <title>{% block title %}Inicio{% endblock %}</title>
 
     <!-- Bootstrap 5 CSS -->
-    <!-- Bootstrap 5 CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -17,15 +16,101 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
+
+    <style>
+      /* ===============================
+         PALETA DE COLORES Y MODO OSCURO
+      ================================*/
+      :root {
+        --color-fondo: #121212;
+        --color-panel: #1e1e1e;
+        --color-texto: #f5f5f5;
+        --color-secundario: #bcbcbc;
+        --color-acento: #00bfa6;
+        --color-navbar: #0a0a0a;
+      }
+
+      body.light-mode {
+        --color-fondo: #f7f7f7;
+        --color-panel: #ffffff;
+        --color-texto: #1a1a1a;
+        --color-secundario: #444444;
+        --color-acento: #007b7f;
+        --color-navbar: #0d6efd;
+      }
+
+      body {
+        background-color: var(--color-fondo);
+        color: var(--color-texto);
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .navbar {
+        background-color: var(--color-navbar) !important;
+        transition: background-color 0.3s;
+      }
+
+      .nav-link,
+      .navbar-brand {
+        color: var(--color-texto) !important;
+      }
+
+      .nav-link:hover {
+        color: var(--color-acento) !important;
+      }
+
+      .dropdown-menu {
+        background-color: var(--color-panel);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .dropdown-item {
+        color: var(--color-texto);
+      }
+
+      .dropdown-item:hover {
+        background-color: var(--color-acento);
+        color: #000;
+      }
+
+      .btn-outline-light {
+        border-color: var(--color-acento);
+        color: var(--color-acento);
+      }
+
+      .btn-outline-light:hover {
+        background-color: var(--color-acento);
+        color: #000;
+      }
+
+      /* BOTÓN MODO OSCURO/CLARO */
+      .theme-toggle-btn {
+        border: none;
+        background: transparent;
+        color: var(--color-texto);
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: color 0.3s;
+      }
+
+      .theme-toggle-btn:hover {
+        color: var(--color-acento);
+      }
+
+      .container {
+        transition: background-color 0.3s, color 0.3s;
+      }
+    </style>
   </head>
-  <body class="bg-light">
+
+  <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
         <!-- Logo + Inicio a la izquierda -->
         <a
           class="navbar-brand d-flex align-items-center"
-          href="{% url 'inicio:inicio' %}"
+          href="{% url 'materia:materia_leer' %}"
         >
           <img
             src="{% static 'img/logo-ipes.png' %}"
@@ -36,12 +121,10 @@
           <span>SITEFA</span>
         </a>
 
-        <!-- Inicio siempre visible a la izquierda del menú -->
-        <a class="nav-link text-white me-3" href="{% url 'inicio:inicio' %}"
-          >Inicio</a
-        >
+        <!-- Inicio siempre visible -->
+        <a class="nav-link me-3" href="{% url 'inicio:inicio' %}">Inicio</a>
 
-        <!-- Botón hamburguesa a la derecha -->
+        <!-- Botón hamburguesa -->
         <button
           class="navbar-toggler ms-auto"
           type="button"
@@ -54,7 +137,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Menú colapsable -->
+        <!-- Menú -->
         <div class="collapse navbar-collapse" id="menuNav">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item dropdown">
@@ -70,9 +153,7 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="materiasDropdown">
                 <li>
-                  <a
-                    class="dropdown-item"
-                    href="{% url 'materia:materia_leer' %}"
+                  <a class="dropdown-item" href="{% url 'materia:materia_leer' %}"
                     >Materias</a
                   >
                 </li>
@@ -124,17 +205,44 @@
                 </button>
               </form>
             </li>
+
+            <!-- Botón modo oscuro -->
+            <li class="nav-item d-flex align-items-center ms-3">
+              <button id="theme-toggle" class="theme-toggle-btn" title="Cambiar tema">
+                🌙
+              </button>
+            </li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <!-- Contenido dinámico -->
+    <!-- Contenido -->
     <div class="container mt-4">{% block section %}{% endblock %}</div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="{% static 'js/modal.js' %}"></script>
+    <script>
+      // ===============================
+      // Script cambio de tema global
+      // ===============================
+      const toggleBtn = document.getElementById("theme-toggle");
+      const body = document.body;
+
+      // Cargar preferencia previa
+      const temaGuardado = localStorage.getItem("theme");
+      if (temaGuardado === "light") {
+        body.classList.add("light-mode");
+        toggleBtn.textContent = "🌞";
+      }
+
+      // Alternar modo
+      toggleBtn.addEventListener("click", () => {
+        const esClaro = body.classList.toggle("light-mode");
+        toggleBtn.textContent = esClaro ? "🌞" : "🌙";
+        localStorage.setItem("theme", esClaro ? "light" : "dark");
+      });
+    </script>
   </body>
 </html>
