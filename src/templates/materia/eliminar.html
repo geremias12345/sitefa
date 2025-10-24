@@ -1,29 +1,28 @@
-{% extends 'inicio/inicio.html' %} {% block section %}
-<div
-  class="d-flex justify-content-center"
-  style="padding-top: 100px; padding-bottom: 50px"
->
-  <div class="card shadow-lg p-4" style="max-width: 450px; border-radius: 15px">
-    <div class="text-center mb-4">
-      <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
-      <h3 class="fw-bold">Confirmar Eliminación</h3>
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg" style="border-radius: 15px;">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">Confirmar Eliminación</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body text-center">
+        <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
+        <p>
+          ¿Estás seguro que querés eliminar al estudiante
+          <strong id="modalNombre"></strong>?
+        </p>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <form id="deleteForm" method="post" class="m-0">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash me-1"></i> Sí, eliminar
+          </button>
+        </form>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          <i class="fas fa-times me-1"></i> Cancelar
+        </button>
+      </div>
     </div>
-    <p class="text-center mb-4">
-      ¿Estás seguro que querés eliminar la materia
-      <strong>{{ object.nombre }}</strong>?
-    </p>
-    <form method="post" class="d-flex justify-content-between">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-danger flex-fill me-2">
-        <i class="fas fa-trash me-1"></i> Sí, eliminar
-      </button>
-      <a
-        href="{% url 'materia:materia_leer' %}"
-        class="btn btn-outline-secondary flex-fill ms-2"
-      >
-        <i class="fas fa-times me-1"></i> Cancelar
-      </a>
-    </form>
   </div>
 </div>
-{% endblock section %}

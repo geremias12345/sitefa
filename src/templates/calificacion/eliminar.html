@@ -1,6 +1,28 @@
-<H1>¿estas seguro de eliminar la calificación?</H1>
-<form method="post">
-    {% csrf_token %}
-    <p>¿Estás seguro de que deseas eliminar esta calificación?</p>
-    <button type="submit">Eliminar Calificación</button>
-</form>
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg" style="border-radius: 15px;">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">Confirmar Eliminación</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body text-center">
+        <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
+        <p>
+          ¿Estás seguro que querés eliminar al estudiante
+          <strong id="modalNombre"></strong>?
+        </p>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <form id="deleteForm" method="post" class="m-0">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash me-1"></i> Sí, eliminar
+          </button>
+        </form>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          <i class="fas fa-times me-1"></i> Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

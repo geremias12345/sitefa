@@ -1,26 +1,139 @@
 {% extends 'inicio/inicio.html' %}
 
 {% block section %}
-    <div class="form-container">
-        <div class="header">
-            <h1><span class="header-icon">✏️</span> Actualizar Docente</h1>
+<div class="form-container">
+    <!-- Encabezado -->
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Actualizar Docente</h1>
+        <a href="{% url 'docente:docente_leer' %}">
+            <button class="btn btn-volver">
+                <i class="fas fa-arrow-left"></i> Volver
+            </button>
+        </a>
+    </div>
+    <hr>
+
+    <!-- Formulario -->
+    <form method="post" class="styled-form">
+        {% csrf_token %}
+
+        <!-- Fila 1 -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="id_nombre" class="form-label">Nombre:</label>
+                <input 
+                    type="text" 
+                    name="nombre" 
+                    id="id_nombre" 
+                    class="form-control" 
+                    maxlength="100" 
+                    required 
+                    value="{{ docente.nombre }}"
+                >
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="id_apellido" class="form-label">Apellido:</label>
+                <input 
+                    type="text" 
+                    name="apellido" 
+                    id="id_apellido" 
+                    class="form-control" 
+                    maxlength="100" 
+                    required 
+                    value="{{ docente.apellido }}"
+                >
+            </div>
         </div>
 
-        <!-- 1. El formulario para editar los datos existentes -->
-        <form method="POST">
-            <!-- 2. Token de seguridad de Django (¡Obligatorio!) -->
-            {% csrf_token %}
+        <!-- Fila 2 -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="id_dni" class="form-label">DNI:</label>
+                <input 
+                    type="text" 
+                    name="dni" 
+                    id="id_dni" 
+                    class="form-control" 
+                    maxlength="100" 
+                    required 
+                    value="{{ docente.dni }}"
+                >
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="id_email" class="form-label">Email:</label>
+                <input 
+                    type="email" 
+                    name="email" 
+                    id="id_email" 
+                    class="form-control" 
+                    maxlength="100" 
+                    required 
+                    value="{{ docente.email }}"
+                >
+            </div>
+        </div>
 
-            <!-- 3. Django rellena automáticamente estos campos con los datos actuales del docente -->
-            <div class="form-fields">
-                {{ form.as_p }}
+        <!-- Fila 3 -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="id_telefono" class="form-label">Teléfono:</label>
+                <input 
+                    type="number" 
+                    name="telefono" 
+                    id="id_telefono" 
+                    class="form-control" 
+                    required 
+                    value="{{ docente.telefono }}"
+                >
             </div>
-            
-            <!-- 4. Botones de acción -->
-            <div class="form-actions">
-                <button type="submit" class="btn btn-actualizar">💾 Guardar Cambios</button>
-                <a href="{% url 'docente:docente_leer' %}" class="btn btn-cancelar">❌ Cancelar</a>
+            <div class="col-md-6 mb-3">
+                <label for="id_direccion" class="form-label">Dirección:</label>
+                <input 
+                    type="text" 
+                    name="direccion" 
+                    id="id_direccion" 
+                    class="form-control" 
+                    maxlength="100" 
+                    required 
+                    value="{{ docente.direccion }}"
+                >
             </div>
-        </form>
-    </div>
+        </div>
+
+        <!-- Fila 4 -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="id_fecha_nacimiento" class="form-label">Fecha de nacimiento:</label>
+                <input 
+                    type="date" 
+                    name="fecha_nacimiento" 
+                    id="id_fecha_nacimiento" 
+                    class="form-control" 
+                    required 
+                    value="{{ docente.fecha_nacimiento|date:'Y-m-d' }}"
+                >
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="id_materia" class="form-label">Materias:</label>
+                <select name="materia" id="id_materia" class="form-select" multiple required>
+                    {% for materia in materias %}
+                        <option 
+                            value="{{ materia.id }}" 
+                            {% if materia in docente.materia.all %}selected{% endif %}
+                        >
+                            {{ materia.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-guardar">
+                <i class="fas fa-save"></i> Guardar
+            </button>
+        </div>
+    </form>
+</div>
 {% endblock section %}
