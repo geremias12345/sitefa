@@ -4,7 +4,7 @@ from apps.materia.models import Materia
 class Estudiante(models.Model):
 	nombre=models.CharField(max_length=200)
 	apellido=models.CharField(max_length=200)
-	dni = models.IntegerField()
+	dni = models.IntegerField(max_length=8)
 	email = models.CharField(max_length=70)
 	telefono = models.IntegerField()
 	direccion = models.CharField(max_length=100)
