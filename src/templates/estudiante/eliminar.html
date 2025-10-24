@@ -1,38 +1,3 @@
-<<<<<<< HEAD
-{% extends 'inicio/inicio.html' %}
-
-{% block section %}
-    <div class="confirmation-container">
-        <div class="header">
-            <h1><span class="header-icon">⚠️</span> Confirmar Eliminación</h1>
-        </div>
-
-        <div class="confirmation-box">
-            <p class="confirmation-message">
-                ¿Estás seguro de que quieres eliminar al estudiante:
-            </p>
-            
-            <h2 class="object-to-delete">
-                <strong>{{ object.nombre }} {{ object.apellido }}</strong>
-            </h2>
-            
-            <p class="warning-message">
-                Esta acción no se puede deshacer.
-            </p>
-        </div>
-
-        <form method="POST">
-            {% csrf_token %}
-
-            <div class="form-actions">
-                <button type="submit" class="btn btn-eliminar">🗑️ Sí, Eliminar Estudiante</button>
-                
-                <a href="{% url 'estudiante:estudiante_leer' %}" class="btn btn-cancelar">❌ Cancelar</a>
-            </div>
-        </form>
-    </div>
-{% endblock section %}
-=======
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content shadow-lg" style="border-radius: 15px;">
@@ -61,4 +26,3 @@
     </div>
   </div>
 </div>
->>>>>>> 68de70cdfdbba7a6d705bd5b24f8645dd748c0b0

@@ -1,258 +1,129 @@
-{% extends 'inicio/inicio.html' %}
+ {% extends 'inicio/inicio.html' %}
 
 {% block section %}
-<<<<<<< HEAD
-<div class="header">
-    <h1><i class="fas fa-user-graduate header-icon"></i> Lista de Estudiantes</h1>
+<div class="d-flex flex-column mb-3">
+
+  <!-- Cabecera: título y botón agregar -->
+  <div class="d-flex justify-content-between align-items-center">
+    <h1 class="mb-0">Materias</h1>
+    <a href="{% url 'materia:materia_crear' %}">
+      <button type="button" class="btn btn-crear">
+        <i class="fas fa-plus"></i> Agregar
+      </button>
+    </a>
+  </div>
+  <hr>
+
+  <!-- Filtros y buscador -->
+  <form method="get" class="d-flex flex-wrap align-items-center gap-2">
+    <!-- Filtro por año -->
+    <div>
+      <label for="anio" class="form-label fw-semibold me-2">Año:</label>
+      <select name="anio" id="anio" class="form-select w-auto d-inline-block" onchange="this.form.submit()">
+          <option value="">Todos los años</option>
+          {% for a in anios %}
+              <option value="{{ a }}" {% if selected_anio == a|stringformat:"s" %}selected{% endif %}>
+                  {{ a }}º Año
+              </option>
+          {% endfor %}
+      </select>
+    </div>
+    <!-- Buscador por nombre -->
+    <div class="input-group mt-2 mt-md-0" style="max-width: 350px;">
+        <input type="text" name="q" class="form-control" placeholder="Buscar por nombre..." value="{{ search_query }}">
+        <button class="btn btn-outline-primary" type="submit" title="Buscar">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+  </form>
 </div>
 
-<form method="get" class="d-flex align-items-center gap-2 mb-3 flex-wrap">
-    <input 
-        type="text" 
-        name="nombre" 
-        class="form-control w-auto" 
-        placeholder="Buscar por nombre..." 
-        value="{{ request.GET.nombre }}"
-    >
-
-    <input 
-        type="text" 
-        name="apellido" 
-        class="form-control w-auto" 
-        placeholder="Buscar por apellido..." 
-        value="{{ request.GET.apellido }}"
-    >
-
-    <button type="submit" class="btn btn-outline-primary" title="Buscar">
-        <i class="fas fa-search"></i>
-    </button>
-
-    <a href="{% url 'estudiante:estudiante_leer' %}" class="btn btn-secondary" title="Limpiar filtros">
-        <i class="fas fa-times"></i>
-    </a>
-
-    <div class="ms-auto">
-        <a href="{% url 'estudiante:estudiante_crear' %}">
-            <button type="button" class="btn btn-crear">
-                <i class="fas fa-plus"></i> Agregar
-            </button>
-        </a>
-    </div>
-</form>
-
+<!-- Tabla de materias -->
 <div class="table-responsive">
     <table class="table table-striped">
-        <thead>
-=======
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="mb-0">Estudiantes</h1>
-    <a href="{% url 'estudiante:estudiante_crear' %}" class="btn btn-crear">
-        <i class="fas fa-plus"></i> Agregar
-    </a>
-</div>
-<hr>
-
-<!-- Barra de búsqueda -->
-<form method="get" class="input-group mb-4" style="max-width: 400px;">
-    <input 
-        type="text" 
-        name="buscar" 
-        class="form-control" 
-        placeholder="Buscar por nombre o apellido..." 
-        value="{{ request.GET.buscar }}"
-    >
-    <button class="btn btn-outline-primary" type="submit" title="Buscar">
-        <i class="fas fa-search"></i>
-    </button>
-    {% if request.GET.buscar %}
-    <a href="{% url 'estudiante:estudiante_leer' %}" class="btn btn-outline-secondary" title="Limpiar filtros">
-        <i class="fas fa-times"></i>
-    </a>
-    {% endif %}
-</form>
-
-<!-- Tabla de estudiantes -->
-<div class="table-responsive">
-    <table class="table table-striped align-middle">
-        <thead class="table-dark">
->>>>>>> 68de70cdfdbba7a6d705bd5b24f8645dd748c0b0
-            <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>DNI</th>
-                <th>Email</th>
-                <th>Teléfono</th>
-<<<<<<< HEAD
-                <th>Dirección</th>
-                <th>Fecha de Nacimiento</th>
-                <th>Ciclo de Ingreso</th>
-                <th>Estado</th>
-                <th>Materias</th>
-=======
->>>>>>> 68de70cdfdbba7a6d705bd5b24f8645dd748c0b0
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for estudiante in estudiantes %}
-<<<<<<< HEAD
-                <tr>
-                    <td>{{ estudiante.nombre }}</td>
-                    <td>{{ estudiante.apellido }}</td>
-                    <td>{{ estudiante.dni }}</td>
-                    <td>{{ estudiante.email }}</td>
-                    <td>{{ estudiante.telefono }}</td>
-                    <td>{{ estudiante.direccion }}</td>
-                    <td>{{ estudiante.fecha_nacimiento|date:"d/m/Y" }}</td>
-                    <td>{{ estudiante.ciclo_ingreso }}</td>
-                    <td>{{ estudiante.get_estado_display }}</td>
-                    <td>
-                        {% if estudiante.materia.all %}
-                            {% for materia in estudiante.materia.all %}
-                                {{ materia.nombre }}{% if not forloop.last %}, {% endif %}
-                            {% endfor %}
-                        {% else %}
-                            Sin materias
-                        {% endif %}
-                    </td>
-                    <td>
-                        <div class="actions d-flex gap-1">
-                            <a href="{% url 'estudiante:estudiante_actualizar' estudiante.pk %}">
-                                <button class="btn btn-actualizar" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                            </a>
-                            <a href="{% url 'estudiante:estudiante_eliminar' estudiante.pk %}">
-                                <button class="btn btn-eliminar" title="Eliminar">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="11" class="text-center">
-                        {% if request.GET.nombre or request.GET.apellido %}
-                            <strong>No se encontraron estudiantes con los datos ingresados.</strong>
-                        {% else %}
-                            <strong>No hay estudiantes registrados.</strong>
-                        {% endif %}
-                    </td>
-                </tr>
-=======
-            <tr>
-                <td>{{ estudiante.nombre }}</td>
-                <td>{{ estudiante.apellido }}</td>
-                <td>{{ estudiante.dni }}</td>
-                <td>{{ estudiante.email }}</td>
-                <td>{{ estudiante.telefono }}</td>
-                <td>
-                    <div class="d-flex gap-1">
-                        <a href="{% url 'estudiante:estudiante_actualizar' estudiante.pk %}" 
-                           class="btn btn-actualizar btn-sm" title="Editar">
-                            <i class="fas fa-edit"></i>
-                        </a>
-
-                        <!-- Botón que abre el modal -->
-                        <button 
-                            type="button"
-                            class="btn btn-eliminar btn-sm"
-                            title="Eliminar"
-                            data-bs-toggle="modal"
-                            data-bs-target="#deleteModal"
-                            data-nombre="{{ estudiante.apellido }}, {{ estudiante.nombre }}"
-                            data-url="{% url 'estudiante:estudiante_eliminar' estudiante.id %}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="10" class="text-center">
-                    {% if request.GET.buscar %}
-                        <strong>No se encontraron estudiantes con los datos ingresados.</strong>
-                    {% else %}
-                        <strong>No hay estudiantes registrados.</strong>
-                    {% endif %}
-                </td>
-            </tr>
->>>>>>> 68de70cdfdbba7a6d705bd5b24f8645dd748c0b0
-            {% endfor %}
-        </tbody>
+       <thead class="table-dark">
+          <tr>
+            <th>Nombre</th>
+            <th>Año</th>
+            <th>Profesorado</th>
+            <th>Acciones</th>
+          </tr>
+       </thead>
+       <tbody>
+          {% for materia in materias %}
+          <tr>
+            <td>{{ materia.nombre }}</td>
+            <td>{{ materia.anio }}</td>
+            <td>{{ materia.profesorado.nombre_instituto|upper }}</td>
+            <td>
+                <div class="d-flex gap-1">
+                    <a href="{% url 'materia:materia_detalle' materia.id %}" class="btn btn-sm btn-info text-white" title="Ver Detalles">
+                        <i class="fas fa-info-circle"></i>
+                    </a>
+                    <a href="{% url 'materia:materia_actualizar' materia.id %}" class="btn btn-sm btn-actualizar" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <!-- Botón eliminar que abre modal -->
+                    <button 
+                        type="button"
+                        class="btn btn-sm btn-eliminar"
+                        title="Eliminar"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteModal"
+                        data-nombre="{{ materia.nombre }}"
+                        data-url="{% url 'materia:materia_eliminar' materia.id %}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="4" class="text-center">No hay materias disponibles.</td>
+          </tr>
+          {% endfor %}
+       </tbody>
     </table>
 </div>
 
-<<<<<<< HEAD
-=======
 <!-- Paginación -->
->>>>>>> 68de70cdfdbba7a6d705bd5b24f8645dd748c0b0
 {% if is_paginated %}
 <nav aria-label="Page navigation">
   <ul class="pagination justify-content-center mt-3">
     {% if page_obj.has_previous %}
       <li class="page-item">
-<<<<<<< HEAD
-        <a class="page-link" href="?{% if request.GET.nombre %}nombre={{ request.GET.nombre }}&{% endif %}{% if request.GET.apellido %}apellido={{ request.GET.apellido }}&{% endif %}page={{ page_obj.previous_page_number }}" aria-label="Anterior">
+        <a class="page-link" href="?{% if selected_anio %}anio={{ selected_anio }}&{% endif %}{% if search_query %}q={{ search_query }}&{% endif %}page={{ page_obj.previous_page_number }}" aria-label="Anterior">
           <span aria-hidden="true">&laquo;</span>
-=======
-        <a class="page-link" href="?buscar={{ request.GET.buscar }}&page={{ page_obj.previous_page_number }}" aria-label="Anterior">
-          &laquo;
->>>>>>> 68de70cdfdbba7a6d705bd5b24f8645dd748c0b0
         </a>
       </li>
     {% endif %}
 
     {% for num in paginator.page_range %}
       <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-<<<<<<< HEAD
-        <a class="page-link" href="?{% if request.GET.nombre %}nombre={{ request.GET.nombre }}&{% endif %}{% if request.GET.apellido %}apellido={{ request.GET.apellido }}&{% endif %}page={{ num }}">{{ num }}</a>
-=======
-        <a class="page-link" href="?buscar={{ request.GET.buscar }}&page={{ num }}">{{ num }}</a>
->>>>>>> 68de70cdfdbba7a6d705bd5b24f8645dd748c0b0
+        <a class="page-link" href="?{% if selected_anio %}anio={{ selected_anio }}&{% endif %}{% if search_query %}q={{ search_query }}&{% endif %}page={{ num }}">{{ num }}</a>
       </li>
     {% endfor %}
 
     {% if page_obj.has_next %}
       <li class="page-item">
-<<<<<<< HEAD
-        <a class="page-link" href="?{% if request.GET.nombre %}nombre={{ request.GET.nombre }}&{% endif %}{% if request.GET.apellido %}apellido={{ request.GET.apellido }}&{% endif %}page={{ page_obj.next_page_number }}" aria-label="Siguiente">
+        <a class="page-link" href="?{% if selected_anio %}anio={{ selected_anio }}&{% endif %}{% if search_query %}q={{ search_query }}&{% endif %}page={{ page_obj.next_page_number }}" aria-label="Siguiente">
           <span aria-hidden="true">&raquo;</span>
-=======
-        <a class="page-link" href="?buscar={{ request.GET.buscar }}&page={{ page_obj.next_page_number }}" aria-label="Siguiente">
-          &raquo;
->>>>>>> 68de70cdfdbba7a6d705bd5b24f8645dd748c0b0
         </a>
       </li>
     {% endif %}
   </ul>
 </nav>
 {% endif %}
-<<<<<<< HEAD
-
-<div class="stats mt-3">
-    <div class="stat-item">
-        <div class="stat-value">{{ estudiantes|length }}</div>
-        <div class="stat-label">Total de estudiantes</div>
-    </div>
-</div>
-
-{% endblock section %}
-=======
-<hr>
 
 <!-- Estadísticas -->
-<div class="stats mt-4 text-center">
+<div class="stats mt-3 text-center">
     <div class="stat-item">
-        <div class="stat-value fs-3 fw-bold">{{ estudiantes|length }}</div>
-        <div class="stat-label text-muted">Total de estudiantes</div>
+        <div class="stat-value fs-3 fw-bold">{{ materias|length }}</div>
+        <div class="stat-label text-muted">Total</div>
     </div>
 </div>
 
-<!-- Modal de eliminación -->
-{% include 'estudiante/eliminar.html' %}
-
+<!-- Incluir modal de eliminación -->
+{% include 'materia/eliminar.html' %}
 
 {% endblock section %}
->>>>>>> 68de70cdfdbba7a6d705bd5b24f8645dd748c0b0
