@@ -16,7 +16,7 @@ class Estudiante(models.Model):
 		"OTRO": "Otro"
 	}
 	estado = models.CharField(max_length=50, choices=estados)
-	materia = models.ManyToManyField(Materia)
+	materias = models.ManyToManyField(Materia, related_name='estudiantes')
 
 	
 	def __str__ (self):

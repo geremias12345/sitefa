@@ -1,6 +1,97 @@
-<h1>Actualizar Estudiante</h1>
-<form method="post">
-{% csrf_token %}
-{{ form.as_p }}
-<button type="submit">Guardar cambios</button>
-</form>
+{% extends 'inicio/inicio.html' %}
+
+{% block section %}
+<div class="form-container">
+    <!-- Encabezado -->
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Actualizar Estudiante</h1>
+        <a href="{% url 'estudiante:estudiante_leer' %}">
+            <button class="btn btn-volver">
+                <i class="fas fa-arrow-left"></i> Volver
+            </button>
+        </a>
+    </div>
+    <hr>
+
+    <!-- Formulario -->
+    <form method="post" class="styled-form">
+        {% csrf_token %}
+
+        <!-- Fila 1 -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="id_nombre" class="form-label">Nombre:</label>
+                <input type="text" name="nombre" id="id_nombre" class="form-control" value="{{ form.nombre.value }}" maxlength="200" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="id_apellido" class="form-label">Apellido:</label>
+                <input type="text" name="apellido" id="id_apellido" class="form-control" value="{{ form.apellido.value }}" maxlength="200" required>
+            </div>
+        </div>
+
+        <!-- Fila 2 -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="id_dni" class="form-label">DNI:</label>
+                <input type="number" name="dni" id="id_dni" class="form-control" value="{{ form.dni.value }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="id_email" class="form-label">Email:</label>
+                <input type="email" name="email" id="id_email" class="form-control" value="{{ form.email.value }}" maxlength="70" required>
+            </div>
+        </div>
+
+        <!-- Fila 3 -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="id_telefono" class="form-label">Teléfono:</label>
+                <input type="number" name="telefono" id="id_telefono" class="form-control" value="{{ form.telefono.value }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="id_direccion" class="form-label">Dirección:</label>
+                <input type="text" name="direccion" id="id_direccion" class="form-control" value="{{ form.direccion.value }}" maxlength="100" required>
+            </div>
+        </div>
+
+        <!-- Fila 4 -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="id_fecha_nacimiento" class="form-label">Fecha de nacimiento:</label>
+                <input type="date" name="fecha_nacimiento" id="id_fecha_nacimiento" class="form-control" value="{{ form.fecha_nacimiento.value|date:'Y-m-d' }}">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="id_ciclo_ingreso" class="form-label">Ciclo de ingreso:</label>
+                <input type="text" name="ciclo_ingreso" id="id_ciclo_ingreso" class="form-control" value="{{ form.ciclo_ingreso.value }}" maxlength="40" required>
+            </div>
+        </div>
+
+        <!-- Fila 5 -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="id_estado" class="form-label">Estado:</label>
+                <select name="estado" id="id_estado" class="form-select" required>
+                    <option value="" disabled>Seleccione un estado</option>
+                    <option value="REGULAR" {% if form.estado.value == "REGULAR" %}selected{% endif %}>Regular</option>
+                    <option value="IRREGULAR" {% if form.estado.value == "IRREGULAR" %}selected{% endif %}>Irregular</option>
+                    <option value="OTRO" {% if form.estado.value == "OTRO" %}selected{% endif %}>Otro</option>
+                </select>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="id_materias" class="form-label">Materias:</label>
+                <select name="materias" id="id_materias" class="form-select" multiple required>
+                    {% for materia in materias %}
+                        <option value="{{ materia.id }}" {% if materia.id in form.materias.value %}selected{% endif %}>{{ materia.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-guardar">
+                <i class="fas fa-save"></i> Guardar
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock section %}

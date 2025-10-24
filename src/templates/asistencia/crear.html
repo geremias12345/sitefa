@@ -1,67 +1,73 @@
 {% extends 'inicio/inicio.html' %}
 
 {% block section %}
+<div class="form-container">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Registrar Asistencia</h1>
+        <a href="{% url 'asistencia:asistencia_leer' %}">
+            <button class="btn btn-volver">
+                <i class="fas fa-arrow-left"></i> Volver
+            </button>
+        </a>
+    </div>
+    <hr>
 
-    <div class="form-container">
-        <h2 class="text-center mb-4">Registrar Asistencia</h2>
-        
-        <form>
-            <!-- Campo Estudiante -->
-            <div class="mb-3">
-                <label for="estudiante" class="form-label">Estudiante</label>
-                <select id="estudiante" class="form-select">
-                    <option selected>Seleccionar estudiante...</option>
-                    <option value="1">Ana Pérez</option>
-                    <option value="2">Luis Gómez</option>
-                </select>
+    <form method="get" class="mb-3">
+        <label for="id_materia" class="form-label">Materia:</label>
+        <select name="materia" id="id_materia" class="form-select" onchange="this.form.submit()">
+            <option value="">---------</option>
+            {% for m in materias %}
+                <option value="{{ m.id }}" {% if selected_materia == m.id|stringformat:"s" %}selected{% endif %}>
+                    {{ m.nombre }}
+                </option>
+            {% endfor %}
+        </select>
+    </form>
+
+    {% if estudiantes %}
+    <form method="post" class="styled-form">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="id_fecha" class="form-label">Fecha:</label>
+            <input type="date" name="fecha" id="id_fecha" class="form-control" value="{{ today }}" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Estudiantes **Ausentes** (Marcar a quienes **NO** asistieron):</label>
+            <div class="form-control p-3" style="max-height: 300px; overflow-y: auto;">
+                <div class="row">
+                    {% for est in estudiantes %}
+                        <div class="col-md-6">
+                            <div class="form-check mb-1">
+                                <input class="form-check-input" type="checkbox" name="ausentes" id="est{{ est.id }}" value="{{ est.id }}">
+                                <label class="form-check-label" for="est{{ est.id }}">
+                                    {{ est.apellido }}, {{ est.nombre }}
+                                </label>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
+        </div>
 
-            <!-- Campo Materia -->
-            <div class="mb-3">
-                <label for="materia" class="form-label">Materia</label>
-                <select id="materia" class="form-select">
-                    <option selected>Seleccionar materia...</option>
-                    <option value="1">Matemáticas</option>
-                    <option value="2">Historia</option>
-                </select>
-            </div>
+        <div class="mb-3">
+            <label for="id_justificacion" class="form-label">Justificación (opcional):</label>
+            <input type="text" name="justificacion" id="id_justificacion" class="form-control" placeholder="Ej: enfermedad, viaje, etc.">
+        </div>
 
-            <!-- Switch de Asistencia -->
-            <div class="mb-3 form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="id_presente" checked>
-                <label class="form-check-label" for="id_presente">Presente</label>
-            </div>
+        <input type="hidden" name="materia" value="{{ selected_materia }}">
 
-            <!-- Campo Justificación (oculto por defecto) -->
-            <div id="justificacion-container" class="mb-3 d-none">
-                <label for="justificacion" class="form-label">Justificación</label>
-                <textarea class="form-control" id="justificacion" rows="3"></textarea>
-            </div>
-
-            <!-- Botón Guardar -->
-            <button type="submit" class="btn btn-primary">
+        <div class="form-actions">
+            <button type="submit" class="btn btn-guardar">
                 <i class="fas fa-save"></i> Guardar
             </button>
-        </form>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const presenteCheckbox = document.getElementById('id_presente');
-            const justificacionContainer = document.getElementById('justificacion-container');
-
-            function toggleJustificacion() {
-                if (presenteCheckbox.checked) {
-                    justificacionContainer.classList.add('d-none');
-                } else {
-                    justificacionContainer.classList.remove('d-none');
-                }
-            }
-
-            toggleJustificacion();
-            presenteCheckbox.addEventListener('change', toggleJustificacion);
-        });
-    </script>
-</body>
-</html>
+        </div>
+    </form>
+    {% else %}
+        {% if selected_materia %}
+            <p class="text-muted">No hay estudiantes registrados en esta materia.</p>
+        {% endif %}
+    {% endif %}
+</div>
 {% endblock section %}
