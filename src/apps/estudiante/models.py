@@ -4,11 +4,11 @@ from apps.materia.models import Materia
 class Estudiante(models.Model):
 	nombre=models.CharField(max_length=200)
 	apellido=models.CharField(max_length=200)
-	dni = models.IntegerField(max_length=8)
-	email = models.CharField(max_length=70)
-	telefono = models.IntegerField()
+	dni = models.CharField(max_length=8, unique=True)
+	email = models.CharField(max_length=70, unique=True)
+	telefono = models.CharField(max_length=12, unique=True)
 	direccion = models.CharField(max_length=100)
-	fecha_nacimiento = models.DateField(null=True)
+	fecha_nacimiento = models.DateField(null=True, unique=True)
 	ciclo_ingreso = models.CharField(max_length=40)
 	estados = {
 		"REGULAR": "Regular",
