@@ -55,10 +55,6 @@
                     <td class="py-3 px-4">{{ docente.telefono }}</td>
                     <td class="py-3 px-4 text-right">
                         <div class="inline-flex items-center gap-2">
-                            <a href="{% url 'docente:docente_detalle' docente.pk %}" 
-                                class="p-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg text-sm transition shadow-md" title="Detalles">
-                                <i class="fas fa-info-circle"></i>
-                            </a>
                             <a href="{% url 'docente:docente_actualizar' docente.pk %}" 
                                 class="p-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg text-sm transition shadow-md" title="Editar">
                                 <i class="fas fa-edit"></i>
@@ -98,7 +94,7 @@
         </a>
         {% endif %}
         {% for num in paginator.page_range %}
-        <a href="?buscar={{ request.GET.buscar }}&page={{ num }}" 
+        <a href="?buscar={{ request.GET.buscar }}&page={{ request.GET.buscar }}&page={{ num }}" 
             class="px-3 py-1 rounded-md transition {% if page_obj.number == num %}bg-indigo-600 text-white{% else %}bg-gray-200 dark:bg-gray-700 hover:bg-indigo-100 dark:hover:bg-gray-600{% endif %}">
             {{ num }}
         </a>
