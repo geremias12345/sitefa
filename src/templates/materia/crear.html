@@ -1,20 +1,21 @@
 {% extends 'inicio/inicio.html' %}
 
 {% block section %}
-<section class="max-w-3xl mx-auto mt-10 bg-white dark:bg-gray-800 shadow-2xl rounded-3xl p-8 transition-all">
+<section class="max-w-3xl mx-auto mt-10 bg-panel text-text shadow-2xl rounded-3xl p-8 transition-all">
 
   <!-- Cabecera -->
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-3xl font-bold text-indigo-700 dark:text-indigo-300 flex items-center gap-2">
       <i class="fa-solid fa-book text-indigo-500"></i> Crear Unidad Curricular
     </h1>
+
     <a href="{% url 'materia:materia_leer' %}"
-       class="inline-flex items-center gap-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium px-4 py-2 rounded-lg transition">
+       class="inline-flex items-center gap-2 bg-panel text-text border border-gray-300 dark:border-gray-700 hover:brightness-95 px-4 py-2 rounded-lg transition">
       <i class="fas fa-arrow-left"></i> Volver
     </a>
   </div>
 
-  <hr class="border-gray-300 dark:border-gray-600 mb-6">
+  <hr class="border-gray-300 dark:border-gray-700 mb-6">
 
   <!-- Formulario -->
   <form method="post" class="space-y-6">
@@ -22,7 +23,7 @@
 
     <!-- Campo: Nombre -->
     <div>
-      <label for="id_nombre" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+      <label for="id_nombre" class="block text-sm font-semibold text-text mb-1">
         Nombre de la materia:
       </label>
       <input type="text" 
@@ -31,16 +32,16 @@
              required 
              maxlength="100"
              value="{{ form.nombre.value|default_if_none:'' }}"
-             class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+             class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-panel text-text focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
     </div>
 
     <!-- Campo: Año -->
     <div>
-      <label for="id_anio" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+      <label for="id_anio" class="block text-sm font-semibold text-text mb-1">
         Año:
       </label>
       <select name="anio" id="id_anio"
-              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-panel text-text focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
         {% for a in anios %}
         <option value="{{ a }}" {% if selected_anio == a|stringformat:"s" %}selected{% endif %}>
           {{ a }}º Año
@@ -51,11 +52,11 @@
 
     <!-- Campo: Profesorado -->
     <div>
-      <label for="id_profesorado" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+      <label for="id_profesorado" class="block text-sm font-semibold text-text mb-1">
         Profesorado:
       </label>
       <select name="profesorado" id="id_profesorado" required
-              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-panel text-text focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
         <option value="">Seleccionar...</option>
         {% for prof in profesorados %}
         <option value="{{ prof.id }}" {% if selected_profesorado == prof.id %}selected{% endif %}>
@@ -67,11 +68,11 @@
 
     <!-- Campo: Duración -->
     <div>
-      <label for="id_duracion" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+      <label for="id_duracion" class="block text-sm font-semibold text-text mb-1">
         Duración:
       </label>
       <select name="duracion" id="id_duracion" required
-              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-panel text-text focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
         {% for code, label in DURACION %}
           <option value="{{ code }}" {% if selected_duracion == code %}selected{% endif %}>
             {{ label }}
@@ -83,7 +84,7 @@
     <!-- Botones -->
     <div class="flex justify-end gap-4 pt-4">
       <a href="{% url 'materia:materia_leer' %}"
-         class="px-5 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+         class="px-5 py-2 rounded-lg bg-panel text-text border border-gray-300 dark:border-gray-700 hover:brightness-95 font-semibold transition">
         Cancelar
       </a>
       <button type="submit"

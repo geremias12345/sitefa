@@ -2,15 +2,20 @@
 module.exports = {
   darkMode: 'class',
   content: [
-    './templates/**/*.html',   // plantillas globales
-    './apps/**/*.html',        // plantillas en apps
-    './core/**/*.html',        // plantillas del core
-    './**/*.js',               // scripts
-    './static/src/css/**/*.css' // css fuente
+    './templates/**/*.html',
+    './apps/**/*.html',
+    './core/**/*.html',
+    './**/*.js',
+    './static/src/css/**/*.css'
   ],
   theme: {
     extend: {
       colors: {
+        bg: "var(--bg)",
+        text: "var(--text)",
+        nav: "var(--nav)",
+        navtext: "var(--nav-text)",
+        panel: "var(--panel)",
         primary: '#2563eb',
         secondary: '#facc15',
       },
