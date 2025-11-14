@@ -1,5 +1,5 @@
 from datetime import date, timezone
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from django.views.generic import ListView, CreateView,UpdateView, DeleteView
 from django.urls import reverse_lazy
@@ -47,6 +47,15 @@ class CalificacionListView(ListView):
         context['bajas'] = calificaciones.filter(nota__lt=6).count()  # notas menores a 6
 
         return context
+SITUACIONES = [
+    ('En curso', 'En curso'),
+    ('Promocionó', 'Promocionó'),
+    ('Abandonó', 'Abandonó'),
+    ('Aprobó', 'Aprobó'),
+    ('Desaprobó', 'Desaprobó'),
+    ('AEF', 'AEF'),
+    ('AT', 'AT'),
+]
 
 class CalificacionCreateView(View):
     template_name = 'calificacion/crear.html'
@@ -60,20 +69,30 @@ class CalificacionCreateView(View):
             'materias': materias,
             'selected_materia': int(selected_materia) if selected_materia else None,
             'estudiantes': estudiantes,
+            'situaciones': SITUACIONES,
         }
         return render(request, self.template_name, context)
 
     def post(self, request):
-        selected_materia = request.POST.get('materia')
-        estudiantes = Estudiante.objects.filter(materias__id=selected_materia).distinct()
+        materia_id = request.POST.get('materia')
+        materia = get_object_or_404(Materia, id=materia_id)
+        estudiantes = Estudiante.objects.filter(materias__id=materia_id).distinct()
+
         for est in estudiantes:
-            nota_valor = request.POST.get(f'notas_{est.id}')
-            if nota_valor:
+            nota = request.POST.get(f'notas_{est.id}')
+            letra = request.POST.get(f'letra_{est.id}', '')
+            situacion = request.POST.get(f'situacion_{est.id}', 'En curso')
+
+            if nota:
+                # Crear calificación nueva
                 Calificacion.objects.create(
                     estudiante=est,
-                    materia_id=selected_materia,
-                    nota=nota_valor
+                    materia=materia,
+                    nota=nota,
+                    nota_letra=letra,
+                    situacion=situacion,
                 )
+
         return redirect('calificacion:calificacion_leer')
 
 class CalificacionUpdateView(UpdateView):

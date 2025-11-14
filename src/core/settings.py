@@ -27,12 +27,13 @@ SECRET_KEY = 'django-insecure-(hum7)5pe@^om*8b+5fbh72^_zz5ziz$^himw&&ib65#h2%kmm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
 
+ALLOWED_HOSTS = ['172.16.100.150', 'localhost', '127.0.0.1']
 
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -141,3 +142,22 @@ LOGOUT_REDIRECT_URL = '/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Panel de Administración SITEFA",
+    "site_header": "Administración SITEFA",
+    "welcome_sign": "Bienvenido al sistema SITEFA",
+    "copyright": "© 2025 SITEFA",
+    "show_ui_builder": False,
+    "theme": "darkly",  #  Modo oscuro predeterminado
+    "custom_css": None,
+    "custom_js": None,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "darkly",  #  Esto fuerza modo oscuro
+    "dark_mode_theme": "darkly",
+    "navbar": "navbar-dark bg-primary",
+    
+}

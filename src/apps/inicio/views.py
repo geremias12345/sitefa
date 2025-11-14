@@ -8,37 +8,55 @@ from apps.estudiante.models import Estudiante
 from apps.docente.models import Docente
 from apps.profesorado.models import Profesorado
 
-class InicioView(TemplateView):
+class InicioView(LoginRequiredMixin, TemplateView):
     template_name = 'inicio/resumen.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        perfil = getattr(self.request.user, 'perfil', None)
+        rol = perfil.rol if perfil else None
 
-        # Materias
-        materias = Materia.objects.all()
+        #variables
+        profesorado = None
+        materias = Asistencia.objects.none()
+        asistencias = Asistencia.objects.none()
+        calificaciones = Calificacion.objects.none()
+        horarios = Horario.objects.none()
+        estudiantes = Estudiante.objects.none()
+        docentes = Docente.objects.none()
+
+        # Si es Bedel, mostrar solo su profesorado
+        if rol == 'bedel' and perfil.profesorado:
+            profesorado = perfil.profesorado
+            materias = Materia.objects.filter(profesorado=profesorado)
+            asistencias = Asistencia.objects.filter(materia__profesorado=profesorado)
+            calificaciones = Calificacion.objects.filter(materia__profesorado=profesorado)
+            horarios = Horario.objects.filter(materia__profesorado=profesorado)
+            estudiantes = Estudiante.objects.filter(materias__profesorado=profesorado).distinct()
+            docentes = Docente.objects.filter(materia__profesorado=profesorado).distinct()
+
+        # Si es Directivo, mostrar todos los profesorados
+        elif rol == 'directivo':
+            materias = Materia.objects.all()
+            asistencias = Asistencia.objects.all()
+            calificaciones = Calificacion.objects.all()
+            horarios = Horario.objects.all()
+            estudiantes = Estudiante.objects.all()
+            docentes = Docente.objects.all()
+            profesorados = Profesorado.objects.all()
+            context['profesorados'] = profesorados
+
+        # Totales
+        context['rol'] = rol
+        context['profesorado'] = profesorado
+        context['materias'] = materias
+        context['estudiantes'] = estudiantes
+        context['docentes'] = docentes
         context['total_materias'] = materias.count()
-
-        # Asistencias
-        asistencias = Asistencia.objects.all()
         context['total_asistencias'] = asistencias.count()
-
-        # Calificaciones
-        calificaciones = Calificacion.objects.all()
         context['total_calificaciones'] = calificaciones.count()
-
-        # Horarios
-        horarios = Horario.objects.all()
         context['total_horarios'] = horarios.count()
-
-        # Estudiantes
-        estudiantes = Estudiante.objects.all()
         context['total_estudiantes'] = estudiantes.count()
-
-        # Docentes
-        docentes = Docente.objects.all()
-        context['total_docentes'] = docentes.count()
-        # Docentes
-        Profesorados = Profesorado.objects.all()
-        context['profesorados'] = Profesorados
+        context['total_docentes'] = docentes.count() if docentes else 0
 
         return context
