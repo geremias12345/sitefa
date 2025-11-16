@@ -1,105 +1,117 @@
 {% extends 'inicio/inicio.html' %}
 
 {% block section %}
-<div class="form-container">
-    <!-- Encabezado -->
-    <div class="d-flex justify-content-between align-items-center">
-        <h1>Actualizar Estudiante</h1>
-        <a href="{% url 'estudiante:estudiante_leer' %}">
-            <button class="btn btn-volver">
-                <i class="fas fa-arrow-left"></i> Volver
-            </button>
+<section class="max-w-4xl mx-auto mt-10 bg-panel text-text shadow-2xl rounded-3xl p-8 transition-all">
+
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-indigo-700 dark:text-indigo-300 flex items-center gap-2">
+            <i class="fa-solid fa-user-graduate text-indigo-500"></i> 
+            Actualizar Estudiante
+        </h1>
+
+        <a href="{% url 'estudiante:estudiante_leer' %}"
+           class="inline-flex items-center gap-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium px-4 py-2 rounded-lg transition shadow-md">
+            <i class="fas fa-arrow-left"></i> Volver
         </a>
     </div>
-    <hr>
 
-    <!-- Formulario -->
-    <form method="post" class="styled-form">
+    <hr class="border-gray-300 dark:border-gray-700 mb-6">
+
+    <form method="post" class="space-y-6">
         {% csrf_token %}
 
-        <!-- Fila 1 -->
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="id_nombre" class="form-label">Nombre:</label>
-                <input type="text" name="nombre" id="id_nombre" class="form-control" value="{{ form.nombre.value }}" maxlength="200" required>
+        <div class="grid md:grid-cols-2 gap-6">
+            <div>
+                <label for="id_nombre" class="block text-sm font-semibold text-text mb-1">Nombre:</label>
+                <input type="text" name="nombre" id="id_nombre" 
+                       class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-100 dark:bg-gray-800 text-text focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" 
+                       value="{{ form.nombre.value|default_if_none:'' }}" maxlength="200" required>
             </div>
-            <div class="col-md-6 mb-3">
-                <label for="id_apellido" class="form-label">Apellido:</label>
-                <input type="text" name="apellido" id="id_apellido" class="form-control" value="{{ form.apellido.value }}" maxlength="200" required>
-            </div>
-        </div>
-
-        <!-- Fila 2 -->
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="id_dni" class="form-label">DNI:</label>
-                <input
-                type="text"
-                name="dni"
-                id="id_dni"
-                class="form-control"
-                maxlength="8"
-                value="{{ form.dni.value }}"
-                required
-                />
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="id_email" class="form-label">Email:</label>
-                <input type="email" name="email" id="id_email" class="form-control" value="{{ form.email.value }}" maxlength="70" required>
+            <div>
+                <label for="id_apellido" class="block text-sm font-semibold text-text mb-1">Apellido:</label>
+                <input type="text" name="apellido" id="id_apellido" 
+                       class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-100 dark:bg-gray-800 text-text focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" 
+                       value="{{ form.apellido.value|default_if_none:'' }}" maxlength="200" required>
             </div>
         </div>
 
-        <!-- Fila 3 -->
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="id_telefono" class="form-label">Teléfono:</label>
-                <input type="text" name="telefono" id="id_telefono" class="form-control" maxlength="15" value="{{ form.telefono.value }}" required>
+        <div class="grid md:grid-cols-2 gap-6">
+            <div>
+                <label for="id_dni" class="block text-sm font-semibold text-text mb-1">DNI:</label>
+                <input type="text" name="dni" id="id_dni" 
+                       class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-100 dark:bg-gray-800 text-text focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" 
+                       maxlength="8" value="{{ form.dni.value|default_if_none:'' }}" required>
             </div>
-            <div class="col-md-6 mb-3">
-                <label for="id_direccion" class="form-label">Dirección:</label>
-                <input type="text" name="direccion" id="id_direccion" class="form-control" value="{{ form.direccion.value }}" maxlength="100" required>
-            </div>
-        </div>
-
-        <!-- Fila 4 -->
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="id_fecha_nacimiento" class="form-label">Fecha de nacimiento:</label>
-                <input type="date" name="fecha_nacimiento" id="id_fecha_nacimiento" class="form-control" value="{{ form.fecha_nacimiento.value|date:'Y-m-d' }}">
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="id_ciclo_ingreso" class="form-label">Ciclo de ingreso:</label>
-                <input type="text" name="ciclo_ingreso" id="id_ciclo_ingreso" class="form-control" value="{{ form.ciclo_ingreso.value }}" maxlength="40" required>
+            <div>
+                <label for="id_email" class="block text-sm font-semibold text-text mb-1">Email:</label>
+                <input type="email" name="email" id="id_email" 
+                       class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-100 dark:bg-gray-800 text-text focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" 
+                       value="{{ form.email.value|default_if_none:'' }}" maxlength="70" required>
             </div>
         </div>
 
-        <!-- Fila 5 -->
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="id_estado" class="form-label">Estado:</label>
-                <select name="estado" id="id_estado" class="form-select" required>
+        <div class="grid md:grid-cols-2 gap-6">
+            <div>
+                <label for="id_telefono" class="block text-sm font-semibold text-text mb-1">Teléfono:</label>
+                <input type="text" name="telefono" id="id_telefono" 
+                       class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-100 dark:bg-gray-800 text-text focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" 
+                       maxlength="15" value="{{ form.telefono.value|default_if_none:'' }}" required>
+            </div>
+            <div>
+                <label for="id_direccion" class="block text-sm font-semibold text-text mb-1">Dirección:</label>
+                <input type="text" name="direccion" id="id_direccion" 
+                       class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-100 dark:bg-gray-800 text-text focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" 
+                       value="{{ form.direccion.value|default_if_none:'' }}" maxlength="100" required>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+            <div>
+                <label for="id_fecha_nacimiento" class="block text-sm font-semibold text-text mb-1">Fecha de nacimiento:</label>
+                <input type="date" name="fecha_nacimiento" id="id_fecha_nacimiento" 
+                       class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-100 dark:bg-gray-800 text-text focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" 
+                       value="{{ form.fecha_nacimiento.value|date:'Y-m-d' }}">
+            </div>
+            <div>
+                <label for="id_ciclo_ingreso" class="block text-sm font-semibold text-text mb-1">Ciclo de ingreso:</label>
+                <input type="text" name="ciclo_ingreso" id="id_ciclo_ingreso" 
+                       class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-100 dark:bg-gray-800 text-text focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" 
+                       value="{{ form.ciclo_ingreso.value|default_if_none:'' }}" maxlength="40" required>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+            <div>
+                <label for="id_estado" class="block text-sm font-semibold text-text mb-1">Estado:</label>
+                <select name="estado" id="id_estado" required
+                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-100 dark:bg-gray-800 text-text focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
                     <option value="" disabled>Seleccione un estado</option>
                     <option value="REGULAR" {% if form.estado.value == "REGULAR" %}selected{% endif %}>Regular</option>
                     <option value="IRREGULAR" {% if form.estado.value == "IRREGULAR" %}selected{% endif %}>Irregular</option>
                     <option value="OTRO" {% if form.estado.value == "OTRO" %}selected{% endif %}>Otro</option>
                 </select>
             </div>
-            <div class="col-md-6 mb-3">
-                <label for="id_materias" class="form-label">Materias:</label>
-                <select name="materias" id="id_materias" class="form-select" multiple required>
+            <div>
+                <label for="id_materias" class="block text-sm font-semibold text-text mb-1">Materias:</label>
+                <select name="materias" id="id_materias" multiple required
+                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-100 dark:bg-gray-800 text-text focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition h-32">
                     {% for materia in materias %}
-                        <option value="{{ materia.id }}" {% if materia.id in form.materias.value %}selected{% endif %}>{{ materia.nombre }}</option>
+                        <option value="{{ materia.id }}" {% if materia.id in form.materias.value|default_if_none:'' %}selected{% endif %}>{{ materia.nombre }}</option>
                     {% endfor %}
                 </select>
-            </div>
+                </div>
         </div>
 
-        <!-- Botones -->
-        <div class="form-actions">
-            <button type="submit" class="btn btn-guardar">
-                <i class="fas fa-save"></i> Guardar
+        <div class="flex justify-end gap-4 pt-4">
+            <a href="{% url 'estudiante:estudiante_leer' %}"
+               class="px-5 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition shadow-md">
+                Cancelar
+            </a>
+            <button type="submit"
+                    class="px-6 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-white font-semibold shadow-md transition">
+                <i class="fas fa-save mr-2"></i> Guardar Cambios
             </button>
         </div>
     </form>
-</div>
+</section>
 {% endblock section %}
