@@ -55,12 +55,16 @@ class MateriaCrearVista(CreateView):
         # Lista de años disponibles
         context['anios'] = ['1', '2', '3', '4']
 
-        # Lista de profesorados activos
+        # Lista de profesorados
         context['profesorados'] = Profesorado.objects.all()
 
+        # Lista de duraciones según el modelo
+        context['DURACION'] = Materia.DURACION
+
+        # Valores seleccionados
         context['selected_anio'] = self.request.GET.get('anio', None)
-        context['selected_profesorado'] = self.request.GET.get(
-            'profesorado', None)
+        context['selected_profesorado'] = self.request.GET.get('profesorado', None)
+        context['selected_duracion'] = self.request.GET.get('duracion', 'Anual')
 
         return context
 

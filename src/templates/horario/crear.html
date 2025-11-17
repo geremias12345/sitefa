@@ -1,38 +1,51 @@
 {% extends 'inicio/inicio.html' %}
 
 {% block section %}
-<div class="form-container">
-    <div class="d-flex justify-content-between align-items-center">
-        <h1>Crear Horario</h1>
-        <a href="{% url 'horario:horario_leer' %}">
-            <button class="btn btn-volver">
-                <i class="fas fa-arrow-left"></i> Volver
-            </button>
+<section class="max-w-3xl mx-auto mt-10 bg-panel text-text shadow-2xl rounded-3xl p-8 transition-all">
+
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-indigo-700 dark:text-indigo-300 flex items-center gap-2">
+            
+            {% if form.instance.pk %}
+                Actualizar Horario
+            {% else %}
+                Crear Horario
+            {% endif %}
+        </h1>
+
+        <a href="{% url 'horario:horario_leer' %}"
+           class="inline-flex items-center gap-2 bg-panel text-text border border-gray-300 dark:border-gray-700 hover:brightness-95 px-4 py-2 rounded-lg transition">
+            <i class="fas fa-arrow-left"></i> Volver
         </a>
     </div>
-    <hr>
 
-    <form method="post" class="styled-form">
+    <hr class="border-gray-300 dark:border-gray-700 mb-6">
+
+    <form method="post" class="space-y-6">
         {% csrf_token %}
 
-        <!-- Materia -->
-        <div class="mb-3">
-            <label for="id_materia" class="form-label">Materia:</label>
-            <select name="materia" id="id_materia" class="form-select" required>
-                <option value="">---------</option>
+        <div>
+            <label for="id_materia" class="block text-sm font-semibold text-text mb-1">
+                Materia:
+            </label>
+            <select name="materia" id="id_materia" required
+                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-panel text-text focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+                <option value="">Seleccionar Materia...</option>
                 {% for mater in materias %}
                     <option value="{{ mater.id }}" {% if selected_materia == mater.id %}selected{% endif %}>
-                        {{ mater.nombre|upper }}
+                        {{ mater.nombre|upper }} ({{ mater.anio }}º)
                     </option>
                 {% endfor %}
             </select>
         </div>
 
-        <!-- Día de la semana -->
-        <div class="mb-3">
-            <label for="id_dia_semana" class="form-label">Día de la semana:</label>
-            <select name="dia_semana" id="id_dia_semana" class="form-select" required>
-                <option value="">---------</option>
+        <div>
+            <label for="id_dia_semana" class="block text-sm font-semibold text-text mb-1">
+                Día de la semana:
+            </label>
+            <select name="dia_semana" id="id_dia_semana" required
+                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-panel text-text focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+                <option value="">Seleccionar Día...</option>
                 <option value="LUN" {% if selected_dia == "LUN" %}selected{% endif %}>Lunes</option>
                 <option value="MAR" {% if selected_dia == "MAR" %}selected{% endif %}>Martes</option>
                 <option value="MIE" {% if selected_dia == "MIE" %}selected{% endif %}>Miércoles</option>
@@ -41,27 +54,37 @@
                 <option value="SAB" {% if selected_dia == "SAB" %}selected{% endif %}>Sábado</option>
             </select>
         </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label for="id_hora_inicio" class="block text-sm font-semibold text-text mb-1">
+                    Hora de inicio:
+                </label>
+                <input type="time" name="hora_inicio" id="id_hora_inicio" required
+                       value="{{ form.hora_inicio.value|default_if_none:'' }}"
+                       class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-panel text-text focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+            </div>
 
-        <!-- Hora de inicio -->
-        <div class="mb-3">
-            <label for="id_hora_inicio" class="form-label">Hora de inicio:</label>
-            <input type="time" name="hora_inicio" id="id_hora_inicio" class="form-control" required
-                  value="{{ form.hora_inicio.value|default_if_none:'' }}">
+            <div>
+                <label for="id_hora_fin" class="block text-sm font-semibold text-text mb-1">
+                    Hora de fin:
+                </label>
+                <input type="time" name="hora_fin" id="id_hora_fin" required
+                       value="{{ form.hora_fin.value|default_if_none:'' }}"
+                       class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-panel text-text focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+            </div>
         </div>
 
-        <!-- Hora de fin -->
-        <div class="mb-3">
-            <label for="id_hora_fin" class="form-label">Hora de fin:</label>
-            <input type="time" name="hora_fin" id="id_hora_fin" class="form-control" required
-                   value="{{ form.hora_fin.value|default_if_none:'' }}">
-        </div>
-
-        <!-- Botón Guardar -->
-        <div class="form-actions">
-            <button type="submit" class="btn btn-guardar">
-                <i class="fas fa-save"></i> Guardar
+        <div class="flex justify-end gap-4 pt-4">
+            <a href="{% url 'horario:horario_leer' %}"
+               class="px-5 py-2 rounded-lg bg-panel text-text border border-gray-300 dark:border-gray-700 hover:brightness-95 font-semibold transition">
+                Cancelar
+            </a>
+            <button type="submit"
+                    class="px-6 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-md transition">
+                <i class="fas fa-save mr-2"></i> Guardar
             </button>
         </div>
     </form>
-</div>
+</section>
 {% endblock section %}

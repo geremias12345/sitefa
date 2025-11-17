@@ -2,8 +2,14 @@ from django.db import models
 from apps.profesorado.models import Profesorado
 
 class Materia(models.Model):
+    DURACION = [
+        ('Anual', 'Anual'),
+        ('Primer Cuatrimestre', 'Primer Cuatrimestre'),
+        ('Segundo Cuatrimestre', 'Segundo Cuatrimestre'),
+    ]
+
     nombre = models.CharField(max_length=100)
-    # Año puede ser 1 a 4 (cuatrimestral o anual)
+   
     anio = models.CharField(
         max_length=10,
         choices=[('1','1º Año'), ('2','2º Año'), ('3','3º Año'), ('4','4º Año')],
@@ -15,7 +21,8 @@ class Materia(models.Model):
         related_name="materias"
     )
 
+    duracion = models.CharField(max_length=30, choices=DURACION, default='Anual')
     def __str__(self):
-        return f"{self.nombre} - {self.anio}"
+        return f"{self.nombre} - {self.duracion} - {self.anio}º Año"
 
 # Create your models here.

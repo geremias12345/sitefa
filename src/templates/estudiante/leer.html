@@ -1,130 +1,152 @@
 {% extends 'inicio/inicio.html' %}
 
 {% block section %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="mb-0">Estudiantes</h1>
-    <a href="{% url 'estudiante:estudiante_crear' %}" class="btn btn-crear">
-        <i class="fas fa-plus"></i> Agregar
-    </a>
-</div>
-<hr>
+<section class="max-w-7xl mx-auto px-4 py-6">
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+        <h1 class="text-3xl font-bold text-indigo-700 dark:text-indigo-300 flex items-center gap-2">
+           
+            Estudiantes
+        </h1>
 
-<!-- Barra de búsqueda -->
-<form method="get" class="input-group mb-4" style="max-width: 400px;">
-    <input 
-        type="text" 
-        name="buscar" 
-        class="form-control" 
-        placeholder="Buscar por nombre o apellido..." 
-        value="{{ request.GET.buscar }}"
-    >
-    <button class="btn btn-outline-primary" type="submit" title="Buscar">
-        <i class="fas fa-search"></i>
-    </button>
-    {% if request.GET.buscar %}
-    <a href="{% url 'estudiante:estudiante_leer' %}" class="btn btn-outline-secondary" title="Limpiar filtros">
-        <i class="fas fa-times"></i>
-    </a>
-    {% endif %}
-</form>
-
-<!-- Tabla de estudiantes -->
-<div class="table-responsive">
-    <table class="table table-striped align-middle">
-        <thead class="table-dark">
-            <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>DNI</th>
-                <th>Email</th>
-                <th>Teléfono</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for estudiante in estudiantes %}
-            <tr>
-                <td>{{ estudiante.nombre }}</td>
-                <td>{{ estudiante.apellido }}</td>
-                <td>{{ estudiante.dni }}</td>
-                <td>{{ estudiante.email }}</td>
-                <td>{{ estudiante.telefono }}</td>
-                <td>
-                    <div class="d-flex gap-1">
-                        <a href="{% url 'estudiante:estudiante_actualizar' estudiante.pk %}" 
-                           class="btn btn-actualizar btn-sm" title="Editar">
-                            <i class="fas fa-edit"></i>
-                        </a>
-
-                        <!-- Botón que abre el modal -->
-                        <button 
-                            type="button"
-                            class="btn btn-eliminar btn-sm"
-                            title="Eliminar"
-                            data-bs-toggle="modal"
-                            data-bs-target="#deleteModal"
-                            data-nombre="{{ estudiante.apellido }}, {{ estudiante.nombre }}"
-                            data-url="{% url 'estudiante:estudiante_eliminar' estudiante.id %}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="10" class="text-center">
-                    {% if request.GET.buscar %}
-                        <strong>No se encontraron estudiantes con los datos ingresados.</strong>
-                    {% else %}
-                        <strong>No hay estudiantes registrados.</strong>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
-<!-- Paginación -->
-{% if is_paginated %}
-<nav aria-label="Page navigation">
-  <ul class="pagination justify-content-center mt-3">
-    {% if page_obj.has_previous %}
-      <li class="page-item">
-        <a class="page-link" href="?buscar={{ request.GET.buscar }}&page={{ page_obj.previous_page_number }}" aria-label="Anterior">
-          &laquo;
+        <a href="{% url 'estudiante:estudiante_crear' %}" 
+            class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-5 py-2.5 rounded-lg shadow-md transition">
+            <i class="fas fa-plus"></i> Agregar
         </a>
-      </li>
-    {% endif %}
-
-    {% for num in paginator.page_range %}
-      <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-        <a class="page-link" href="?buscar={{ request.GET.buscar }}&page={{ num }}">{{ num }}</a>
-      </li>
-    {% endfor %}
-
-    {% if page_obj.has_next %}
-      <li class="page-item">
-        <a class="page-link" href="?buscar={{ request.GET.buscar }}&page={{ page_obj.next_page_number }}" aria-label="Siguiente">
-          &raquo;
-        </a>
-      </li>
-    {% endif %}
-  </ul>
-</nav>
-{% endif %}
-<hr>
-
-<!-- Estadísticas -->
-<div class="stats mt-4 text-center">
-    <div class="stat-item">
-        <div class="stat-value fs-3 fw-bold">{{ estudiantes|length }}</div>
-        <div class="stat-label text-muted">Total de estudiantes</div>
     </div>
+
+    <form method="get" class="flex gap-4 items-center mb-6 bg-panel p-4 rounded-xl shadow-sm max-w-lg mx-auto sm:mx-0">
+        <div class="flex items-center border border-gray-300 dark:border-gray-700 bg-panel rounded-lg overflow-hidden w-full">
+            <input 
+                type="text" 
+                name="buscar" 
+                class="px-3 py-2 w-full bg-transparent text-text focus:outline-none" 
+                placeholder="Buscar por nombre o apellido..." 
+                value="{{ request.GET.buscar }}"
+            >
+            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 transition">
+                <i class="fas fa-search"></i>
+            </button>
+            {% if request.GET.buscar %}
+            <a href="{% url 'estudiante:estudiante_leer' %}" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 transition" title="Limpiar filtros">
+                <i class="fas fa-times"></i>
+            </a>
+            {% endif %}
+        </div>
+    </form>
+
+    <div class="overflow-x-auto bg-panel rounded-2xl shadow-lg">
+        <table class="min-w-full text-left text-text">
+            <thead class="bg-indigo-600 text-white">
+                <tr>
+                    <th class="py-3 px-4 font-semibold">Nombre</th>
+                    <th class="py-3 px-4 font-semibold">Apellido</th>
+                    <th class="py-3 px-4 font-semibold">DNI</th>
+                    <th class="py-3 px-4 font-semibold">Email</th>
+                    <th class="py-3 px-4 font-semibold">Teléfono</th>
+                    <th class="py-3 px-4 font-semibold text-right">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for estudiante in estudiantes %}
+                <tr class="border-b border-gray-100 dark:border-gray-700 transition">
+                    <td class="py-3 px-4">{{ estudiante.nombre }}</td>
+                    <td class="py-3 px-4">{{ estudiante.apellido }}</td>
+                    <td class="py-3 px-4">{{ estudiante.dni }}</td>
+                    <td class="py-3 px-4">{{ estudiante.email }}</td>
+                    <td class="py-3 px-4">{{ estudiante.telefono }}</td>
+                    <td class="py-3 px-4 text-right">
+                        <div class="inline-flex items-center gap-2">
+                            <a href="{% url 'estudiante:estudiante_actualizar' estudiante.pk %}" 
+                                class="p-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg text-sm transition shadow-md" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button 
+                                type="button"
+                                class="p-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm transition shadow-md"
+                                title="Eliminar"
+                                data-nombre="{{ estudiante.apellido }}, {{ estudiante.nombre }}"
+                                data-url="{% url 'estudiante:estudiante_eliminar' estudiante.id %}"
+                                onclick="openDeleteModal(this)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="py-6 text-center text-text opacity-75">
+                        {% if request.GET.buscar %}
+                            <strong>No se encontraron estudiantes con los datos ingresados.</strong>
+                        {% else %}
+                            <strong>No hay estudiantes registrados.</strong>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if is_paginated %}
+    <div class="flex justify-center items-center gap-2 mt-6">
+        {% if page_obj.has_previous %}
+        <a href="?buscar={{ request.GET.buscar }}&page={{ page_obj.previous_page_number }}" class="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-indigo-100 dark:hover:bg-gray-600 transition">
+            &laquo;
+        </a>
+        {% endif %}
+        {% for num in paginator.page_range %}
+        <a href="?buscar={{ request.GET.buscar }}&page={{ num }}" 
+            class="px-3 py-1 rounded-md transition {% if page_obj.number == num %}bg-indigo-600 text-white{% else %}bg-gray-200 dark:bg-gray-700 hover:bg-indigo-100 dark:hover:bg-gray-600{% endif %}">
+            {{ num }}
+        </a>
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <a href="?buscar={{ request.GET.buscar }}&page={{ page_obj.next_page_number }}" class="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-indigo-100 dark:hover:bg-gray-600 transition">
+            &raquo;
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="mt-8 flex justify-center">
+        <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-4 rounded-xl shadow-lg text-center">
+            <p class="text-4xl font-bold">{{ estudiantes|length }}</p>
+            <p class="text-sm tracking-wide">Total de estudiantes</p>
+        </div>
+    </div>
+</section>
+
+<div id="deleteModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+  <div class="bg-panel rounded-2xl shadow-2xl p-6 w-80 text-center">
+    <i class="fa-solid fa-triangle-exclamation text-red-500 text-4xl mb-3"></i>
+    <h3 class="text-lg font-semibold mb-2 text-text">¡Cuidado!</h3>
+    <p class="text-text opacity-75 mb-6" id="deleteModalText"></p>
+    <div class="flex justify-center gap-3">
+      <button onclick="closeDeleteModal()" class="px-4 py-2 bg-gray-300 dark:bg-gray-700 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-600 transition">
+        Cancelar
+      </button>
+      <form id="deleteForm" method="post">
+        {% csrf_token %}
+        <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition">
+          Eliminar
+        </button>
+      </form>
+    </div>
+  </div>
 </div>
 
-<!-- Modal de eliminación -->
-{% include 'estudiante/eliminar.html' %}
-
+<script>
+// La función openDeleteModal debe estar disponible para que el botón de eliminar funcione.
+function openDeleteModal(button) {
+  const nombre = button.getAttribute("data-nombre");
+  const url = button.getAttribute("data-url");
+  document.getElementById("deleteModalText").innerText = `¿Deseas eliminar al estudiante "${nombre}"?`;
+  document.getElementById("deleteForm").setAttribute("action", url);
+  document.getElementById("deleteModal").classList.remove("hidden");
+}
+function closeDeleteModal() {
+  document.getElementById("deleteModal").classList.add("hidden");
+}
+</script>
 
 {% endblock section %}

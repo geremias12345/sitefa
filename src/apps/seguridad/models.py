@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from apps.profesorado.models import Profesorado
 
-class Usuario(models.Model):
+class Perfil(models.Model):
     ROLES = [
         ('bedel', 'Bedel'),
         ('secretaria', 'Secretaría'),

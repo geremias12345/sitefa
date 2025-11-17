@@ -1,28 +1,54 @@
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content shadow-lg" style="border-radius: 15px;">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title">Confirmar Eliminación</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body text-center">
-        <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
-        <p>
-          ¿Estás seguro que querés eliminar al estudiante
-          <strong id="modalNombre"></strong>?
-        </p>
-      </div>
-      <div class="modal-footer justify-content-between">
-        <form id="deleteForm" method="post" class="m-0">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-danger">
-            <i class="fas fa-trash me-1"></i> Sí, eliminar
-          </button>
-        </form>
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-          <i class="fas fa-times me-1"></i> Cancelar
+<!-- Modal de eliminación (TailwindCSS) -->
+<div id="deleteModal"
+     class="hidden fixed inset-0 bg-black/60 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 transition-all duration-300">
+
+  <!-- Contenido del modal -->
+  <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-96 max-w-[90%] p-6 transform transition-all scale-95 opacity-0 animate-[fadeIn_0.25s_ease-out_forwards]">
+
+    <!-- Encabezado -->
+    <div class="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-2">
+      <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 flex items-center gap-2">
+        <i class="fa-solid fa-triangle-exclamation text-red-500 text-xl"></i>
+        Confirmar eliminación
+      </h2>
+      <button onclick="closeDeleteModal()"
+              class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+    </div>
+
+    <!-- Cuerpo -->
+    <div class="text-center py-6">
+      <i class="fa-solid fa-circle-exclamation text-red-500 text-5xl mb-3"></i>
+      <p class="text-gray-700 dark:text-gray-300 text-base">
+        ¿Estás seguro que querés eliminar <br>
+        <strong id="modalNombre" class="text-red-600 dark:text-red-400"></strong>?
+      </p>
+    </div>
+
+    <!-- Pie de modal -->
+    <div class="flex justify-end gap-3 border-t border-gray-200 dark:border-gray-700 pt-4">
+      <button onclick="closeDeleteModal()"
+              class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+        <i class="fa-solid fa-xmark mr-1"></i> Cancelar
+      </button>
+
+      <form id="deleteForm" method="post" class="m-0">
+        {% csrf_token %}
+        <button type="submit"
+                class="px-5 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold shadow-md transition">
+          <i class="fa-solid fa-trash-can mr-1"></i> Eliminar
         </button>
-      </div>
+      </form>
     </div>
   </div>
 </div>
+
+<!-- Animaciones -->
+<style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+</style>
+
