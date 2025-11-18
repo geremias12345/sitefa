@@ -2,6 +2,8 @@ from datetime import date
 from django.shortcuts import redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+# Importaciones necesarias para filtrar
+from django.db.models import Q 
 from apps.estudiante.models import Estudiante
 from apps.materia.models import Materia
 from .models import Asistencia
@@ -29,9 +31,14 @@ class AsistenciaLeerView(ListView):
         if materia_id:
             queryset = queryset.filter(materia_id=materia_id)
 
-        estudiante_id = self.request.GET.get('estudiante')
-        if estudiante_id:
-            queryset = queryset.filter(estudiante_id=estudiante_id)
+        # FILTRO CORREGIDO: Busca por nombre O apellido usando Q
+        filtro_estudiante = self.request.GET.get('estudiante')
+        if filtro_estudiante:
+            # Filtra si el nombre O el apellido contiene la cadena (insensible a mayúsculas)
+            queryset = queryset.filter(
+                Q(estudiante__nombre__icontains=filtro_estudiante) | 
+                Q(estudiante__apellido__icontains=filtro_estudiante)
+            )
 
         estado = self.request.GET.get('estado')
         if estado == 'ausente':

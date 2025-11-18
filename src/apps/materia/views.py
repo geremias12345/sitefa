@@ -1,7 +1,10 @@
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy
+# Modelos importados desde otras aplicaciones
 from apps.horario.models import Horario
 from apps.profesorado.models import Profesorado
+from apps.seguridad.models import Perfil # <-- ¡IMPORTACIÓN CRUCIAL DEL MODELO PERFIL!
+# Modelos de la aplicación actual
 from .models import Materia
 
 
@@ -13,9 +16,39 @@ class MateriaLeerVista(ListView):
 
     def get_queryset(self):
         """
-        Retorna la lista de materias filtrada por año y/o nombre.
+        Retorna la lista de materias filtrada:
+        1. Por el Profesorado si el usuario tiene el rol 'Bedel'.
+        2. Por año y/o nombre (filtros existentes).
         """
+        # 1. Obtiene el queryset inicial (todas las materias)
         queryset = super().get_queryset()
+        
+        usuario_actual = self.request.user
+        
+        # --- LÓGICA DE FILTRADO POR PROFESORADO (SOLO PARA BEDELES) ---
+        
+        # Intenta obtener el Perfil asociado al usuario logueado
+        try:
+            # Acceso al perfil usando el related_name='perfil'
+            perfil = usuario_actual.perfil
+            
+            # 2. Comprobar si tiene el rol 'bedel' Y tiene un profesorado asignado
+            if perfil.rol == 'bedel' and perfil.profesorado:
+                
+                # 3. Aplicar el filtro: solo materias con el mismo Profesorado
+                # Se asume que Materia tiene un campo 'profesorado'
+                queryset = queryset.filter(profesorado=perfil.profesorado)
+                
+            # Si el rol NO es 'bedel' (ej. 'secretaria', 'directivo'), el queryset NO se filtra aquí.
+                
+        except Perfil.DoesNotExist:
+            # Maneja el caso en que el usuario no tiene objeto Perfil asociado
+            pass
+        except AttributeError:
+             # Maneja si usuario_actual no existe o no tiene el atributo 'perfil'
+             pass
+        
+        # --- LÓGICA DE FILTRADO EXISTENTE (por URL) ---
         selected_anio = self.request.GET.get('anio')
         search_query = self.request.GET.get('q')
 
@@ -26,21 +59,6 @@ class MateriaLeerVista(ListView):
             queryset = queryset.filter(nombre__icontains=search_query)
 
         return queryset.order_by('anio', 'nombre')
-
-    def get_context_data(self, **kwargs):
-        """
-        Agrega variables adicionales al contexto: lista de años,
-        año seleccionado y texto de búsqueda.
-        """
-        context = super().get_context_data(**kwargs)
-        anios = Materia.objects.values_list(
-            'anio', flat=True).distinct().order_by('anio')
-
-        context['anios'] = anios
-        context['selected_anio'] = self.request.GET.get('anio', '')
-        context['search_query'] = self.request.GET.get('q', '')
-
-        return context
 
 
 class MateriaCrearVista(CreateView):

@@ -76,7 +76,7 @@
             </thead>
             <tbody>
                 {% for c in calificaciones %}
-                <tr class="border-b border-gray-100 dark:border-gray-700 transition {% if c.nota < 6 %}bg-red-100 dark:bg-red-900/50 hover:bg-red-200 dark:hover:bg-red-900{% else %}hover:bg-gray-50 dark:hover:bg-gray-700/50{% endif %}">
+                <tr class="border-b border-gray-100 dark:border-gray-700 transition {% if c.nota < 6 %}bg-red-100 dark:bg-red-900/50{% endif %}">
                     <td class="py-3 px-4">{{ c.fecha|date:"d/m/Y" }}</td>
                     <td class="py-3 px-4">{{ c.estudiante.apellido }}, {{ c.estudiante.nombre }}</td>
                     <td class="py-3 px-4">{{ c.materia.nombre }} ({{ c.materia.anio }}º)</td>

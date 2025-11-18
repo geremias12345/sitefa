@@ -26,7 +26,8 @@
             </thead>
             <tbody>
                 {% for horario in horarios %}
-                <tr class="border-b border-gray-100 dark:border-gray-700 transition hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                {# **LÍNEA MODIFICADA:** Se eliminaron las clases hover:bg-gray-50 dark:hover:bg-gray-700/50 #}
+                <tr class="border-b border-gray-100 dark:border-gray-700 transition">
                     <td class="py-3 px-4">{{ horario.materia }}</td>
                     <td class="py-3 px-4">{{ horario.dia_semana }}</td>
                     <td class="py-3 px-4 font-medium">{{ horario.hora_inicio|time:"H:i" }}</td>
